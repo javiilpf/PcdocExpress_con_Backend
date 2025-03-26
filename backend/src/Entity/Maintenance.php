@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MaintenanceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use \App\Enum\DispositiveType;
@@ -48,6 +50,17 @@ class Maintenance
 
     #[ORM\ManyToOne(inversedBy: 'maintenances')]
     private ?user $idAdministrator = null;
+
+    /**
+     * @var Collection<int, Opinion>
+     */
+    #[ORM\OneToMany(targetEntity: Opinion::class, mappedBy: 'maintenance_id')]
+    private Collection $opinions;
+
+    public function __construct()
+    {
+        $this->opinions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -182,6 +195,36 @@ class Maintenance
     public function setIdAdministrator(?user $idAdministrator): static
     {
         $this->idAdministrator = $idAdministrator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Opinion>
+     */
+    public function getOpinions(): Collection
+    {
+        return $this->opinions;
+    }
+
+    public function addOpinion(Opinion $opinion): static
+    {
+        if (!$this->opinions->contains($opinion)) {
+            $this->opinions->add($opinion);
+            $opinion->setMaintenanceId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpinion(Opinion $opinion): static
+    {
+        if ($this->opinions->removeElement($opinion)) {
+            // set the owning side to null (unless already changed)
+            if ($opinion->getMaintenanceId() === $this) {
+                $opinion->setMaintenanceId(null);
+            }
+        }
 
         return $this;
     }

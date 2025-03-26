@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-#[Route('/api/maintenance', name: 'api_maintenance_')]
+#[Route('/maintenance', name: 'api_maintenance_')]
 class MaintenanceApiController extends AbstractController
 {
     private EntityManagerInterface $entityManager;

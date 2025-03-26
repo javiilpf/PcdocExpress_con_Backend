@@ -19,6 +19,14 @@ const RootLayout = () => {
             {!token ? (
               <>
                 <li>
+                  <button
+                    onClick={() => (window.location.href = "/shop")}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition duration-300 mb-2"
+                  >
+                    Tienda
+                  </button>
+                </li>
+                <li>
                   <Link
                     to="/auth/login"
                     className="text-white hover:text-gray-200 transition duration-300"
@@ -37,6 +45,14 @@ const RootLayout = () => {
               </>
             ) : (
               <>
+                <li>
+                  <button
+                    onClick={() => (window.location.href = "/shop")}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-full font-semibold hover:bg-blue-700 transition duration-300 mb-2"
+                  >
+                    Tienda
+                  </button>
+                </li>
                 <li>
                   <button
                     onClick={() => (window.location.href = "/application")}

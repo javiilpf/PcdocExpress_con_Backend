@@ -5,11 +5,12 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import HomePage from "../pages/HomePage";
 import AuthLayout from "../layout/AuthLayout";
-import ProtectedRoute from "../../../../Javascript/SegundoTrimestre/Isaias/Curso-React-2025-M/proyectos/06-relacion-repaso - copia/ejercicio1/src/components/ProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRoute";
 import ApplicationPage from "../pages/ApplicationPage";
 import NewReparationPage from "../pages/NewReparationPage";
 import NewInstallationPage from "../pages/NewInstallationPage";
 import NewMaintenancePage from "../pages/NewMaintenancePage";
+import ShopPage from "../pages/shopPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,43 +24,45 @@ export const router = createBrowserRouter([
       },
       {
         path: "application",
-        children:[
+        children: [
           {
-            index:true,
-            element:(
+            index: true,
+            element: (
               <ProtectedRoute>
                 <ApplicationPage />
               </ProtectedRoute>
-            )
+            ),
           },
           {
-            path:"reparation/new",
-            element:(
+            path: "reparation/new",
+            element: (
               <ProtectedRoute>
                 <NewReparationPage />
               </ProtectedRoute>
-            )
+            ),
           },
           {
-            path:"installation/new",
-            element:(
+            path: "installation/new",
+            element: (
               <ProtectedRoute>
                 <NewInstallationPage />
               </ProtectedRoute>
-            )
+            ),
           },
           {
-            path:"maintenance/new",
-            element:(
+            path: "maintenance/new",
+            element: (
               <ProtectedRoute>
                 <NewMaintenancePage />
               </ProtectedRoute>
-            )
-          }
+            ),
+          },
         ],
-        
       },
-      
+      {
+        path: "shop",
+        element: <ShopPage />, 
+      },
     ],
   },
   {
@@ -68,12 +71,11 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        path: "login", // Elimina la barra inicial
+        path: "login", // Eliminado `index`
         element: <LoginPage />,
       },
       {
-        path: "register", // Elimina la barra inicial
+        path: "register", // Eliminado `index`
         element: <RegisterPage />,
       },
     ],

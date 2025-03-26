@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ReparationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use \App\Enum\DispositiveType;
@@ -17,7 +19,7 @@ class Reparation
 
     #[ORM\ManyToOne(inversedBy: 'reparations')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $id_client = null;
+    private ?User $id_client = null;
 
     #[ORM\Column(enumType: DispositiveType::class)]
     private ?DispositiveType $deviceType = null;
@@ -50,19 +52,30 @@ class Reparation
     private ?int $valoration = null;
 
     #[ORM\ManyToOne(inversedBy: 'reparations')]
-    private ?user $id_administrator = null;
+    private ?User $id_administrator = null;
+
+    /**
+     * @var Collection<int, Opinion>
+     */
+    #[ORM\OneToMany(targetEntity: Opinion::class, mappedBy: 'reparation_id')]
+    private Collection $opinions;
+
+    public function __construct()
+    {
+        $this->opinions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getIdClient(): ?user
+    public function getIdClient(): ?User
     {
         return $this->id_client;
     }
 
-    public function setIdClient(?user $id_client): static
+    public function setIdClient(?User $id_client): static
     {
         $this->id_client = $id_client;
 
@@ -189,14 +202,44 @@ class Reparation
         return $this;
     }
 
-    public function getIdAdministrator(): ?user
+    public function getIdAdministrator(): ?User
     {
         return $this->id_administrator;
     }
 
-    public function setIdAdministrator(?user $id_administrator): static
+    public function setIdAdministrator(?User $id_administrator): static
     {
         $this->id_administrator = $id_administrator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Opinion>
+     */
+    public function getOpinions(): Collection
+    {
+        return $this->opinions;
+    }
+
+    public function addOpinion(Opinion $opinion): static
+    {
+        if (!$this->opinions->contains($opinion)) {
+            $this->opinions->add($opinion);
+            $opinion->setReparationId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpinion(Opinion $opinion): static
+    {
+        if ($this->opinions->removeElement($opinion)) {
+            // set the owning side to null (unless already changed)
+            if ($opinion->getReparationId() === $this) {
+                $opinion->setReparationId(null);
+            }
+        }
 
         return $this;
     }

@@ -3,13 +3,16 @@ import { AuthProvider } from "./context/AuthContext";
 import { MaintenanceProvider } from "./context/MaintenanceContext"; // Asegúrate de importar el MaintenanceProvider
 import { router } from "./router";
 import { ReparationProvider } from "./context/ReparationContext";
+import { ProductProvider } from "./context/ProductContext";
 
 const App = () => {
   return (
     <AuthProvider>
       <MaintenanceProvider> 
         <ReparationProvider>
-          <RouterProvider router={router}/>
+          <ProductProvider>
+            <RouterProvider router={router}/>
+          </ProductProvider>
         </ReparationProvider>
       </MaintenanceProvider>
     </AuthProvider>
