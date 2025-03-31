@@ -37,7 +37,7 @@ class ReparationApiController extends AbstractController
 
             $reparations = $this->entityManager
                 ->getRepository(Reparation::class)
-                ->findBy(['idClient' => $user]);
+                ->findBy(['id_client' => $user]);
 
             return $this->json([
                 'status' => 'success',
@@ -57,7 +57,7 @@ class ReparationApiController extends AbstractController
                     'reparationDate',
                     'state',
                     'valoration',
-                    'idClient' => ['id', 'email'],
+                    'id_client' => ['id', 'email'],
                     'idAdministrator' => ['id', 'email']
                 ]
             ]);
@@ -106,4 +106,4 @@ class ReparationApiController extends AbstractController
             ], 500);
         }
     }
-} 
+}

@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data.message || "Error en login");
       }
-
+      console.log(data.user);
       if (data.user) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));

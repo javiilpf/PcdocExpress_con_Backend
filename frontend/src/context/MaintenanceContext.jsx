@@ -47,6 +47,7 @@ export const MaintenanceProvider = ({ children }) => {
             }
             const data = await response.json();
             console.log('Maintenances data:', data); // Para depuración
+            console.log("mantenimiento:")
             setMaintenances(Array.isArray(data) ? data : data.data || []);
         } catch (err) {
             console.error('Error fetching maintenances:', err); // Para depuración

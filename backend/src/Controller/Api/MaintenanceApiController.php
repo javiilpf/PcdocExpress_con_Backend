@@ -13,8 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-#[Route('/maintenance', name: 'api_maintenance_')]
+#[Route('api/maintenance', name: 'api_maintenance_')]
 class MaintenanceApiController extends AbstractController
+
 {
     private EntityManagerInterface $entityManager;
     private SerializerInterface $serializer;
@@ -27,48 +28,48 @@ class MaintenanceApiController extends AbstractController
         $this->serializer = $serializer;
     }
 
-    #[Route('', name: 'index', methods: ['GET'])]
+    #[Route('/user/{id}', name: 'index', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        try {
-            /** @var User $user */
-            $user = $this->getUser();
-            if (!$user) {
-                return $this->json(['error' => 'Usuario no autenticado'], 401);
-            }
-
-            $maintenances = $this->entityManager
-                ->getRepository(Maintenance::class)
-                ->findBy(['idClient' => $user]);
-
-            return $this->json([
-                'status' => 'success',
-                'data' => $maintenances
-            ], 200, [], [
-                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
-                    return $object->getId();
-                },
-                AbstractNormalizer::ATTRIBUTES => [
-                    'id',
-                    'deviceType',
-                    'model',
-                    'processor',
-                    'ram',
-                    'storage',
-                    'specifications',
-                    'maintenanceDate',
-                    'state',
-                    'valoration',
-                    'idClient' => ['id', 'email'],
-                    'idAdministrator' => ['id', 'email']
-                ]
-            ]);
-        } catch (\Exception $e) {
-            return $this->json([
-                'status' => 'error',
-                'message' => $e->getMessage()
-            ], 500);
+    try {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->json(['error' => 'Usuario no autenticado'], 401);
         }
+
+        $maintenances = $this->entityManager
+            ->getRepository(Maintenance::class)
+            ->findBy(['idClient' => $user]);
+
+        return $this->json([
+            'status' => 'success',
+            'data' => $maintenances
+        ], 200, [], [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object) {
+                return $object->getId();
+            },
+            AbstractNormalizer::ATTRIBUTES => [
+                'id',
+                'deviceType',
+                'model',
+                'processor',
+                'ram',
+                'storage',
+                'specifications',
+                'maintenanceDate',
+                'state',
+                'valoration',
+                'idClient' => ['id', 'email'],
+                'idAdministrator' => ['id', 'email']
+            ]
+        ]);
+    } catch (\Exception $e) {
+        return $this->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
     }
 
     #[Route('', name: 'create', methods: ['POST'])]

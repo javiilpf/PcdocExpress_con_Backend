@@ -21,22 +21,25 @@ class AuthController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            
+
             if (!isset($data['email']) || !isset($data['password'])) {
                 return $this->json([
                     'message' => 'Faltan credenciales'
                 ], Response::HTTP_BAD_REQUEST);
             }
 
+            // Buscar el usuario por email
             $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
-            
+
+            // Validar credenciales
             if (!$user || !$passwordHasher->isPasswordValid($user, $data['password'])) {
                 return $this->json([
                     'message' => 'Email o contraseña incorrectos'
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            $token = $jwtManager->create($user);
+            // Generar token JWT
+            // $token = $jwtManager->create($user);
 
             return $this->json([
                 'user' => [
@@ -44,7 +47,7 @@ class AuthController extends AbstractController
                     'email' => $user->getEmail(),
                     'roles' => $user->getRoles()
                 ],
-                'token' => $token,
+                'token' => "no funciona",
                 'message' => 'Logged in successfully'
             ]);
         } catch (\Exception $e) {
@@ -59,11 +62,11 @@ class AuthController extends AbstractController
     {
         try {
             $data = json_decode($request->getContent(), true);
-            
+
             $user = new User();
             $user->setEmail($data['email']);
             $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
-            
+
             $entityManager->persist($user);
             $entityManager->flush();
 

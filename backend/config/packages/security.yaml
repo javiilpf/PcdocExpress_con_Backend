@@ -12,7 +12,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        
+
         login:
             pattern: ^/api/login
             stateless: true
@@ -20,7 +20,7 @@ security:
                 check_path: /api/login
                 username_path: email
                 password_path: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
+                success_handler: App\Security\CustomAuthenticationSuccessHandler
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
@@ -31,17 +31,14 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
             logout:
                 path: /api/logout
                 invalidate_session: true
 
     access_control:
-        - { path: ^/api/product, roles: PUBLIC_ACCESS }  # ✅ Permitir acceso público a los productos
+        - { path: ^/api/product, roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
-        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }  # 🔐 Proteger el resto de la API
-
-
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/maintenance/user/, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/reparation/user/, roles: IS_AUTHENTICATED_FULLY }

@@ -1,14 +1,15 @@
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 
 const ProtectedRoute = ({ children }) => {
-  // const { user, token } = useAuth();
-  const user = JSON.parse(localStorage.getItem("user"));
-  const token = localStorage.getItem("token");
-  if (!token || !user) {
-    console.log("token", token);
-    // return <navigate to="/" />;
-    alert(token);
+   const { token } = useAuth();
+  
+
+  if (!token) {
+    console.log("Redirigiendo a la página de inicio");
+    return <Navigate to="/" />; // Redirige a la página de inicio si no hay token o usuario
+    
   }
   return children;
 };
