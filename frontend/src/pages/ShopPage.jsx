@@ -65,7 +65,7 @@ const ShopPage = () => {
 
               <div className="flex justify-between items-center mt-4">
                 <span className="text-lg font-bold text-blue-600">{product.price}€</span>
-                <span className="text-sm text-gray-500">Stock: {product.stock}</span>
+                
               </div>
 
               {product.valoration && (
